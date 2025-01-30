@@ -22,21 +22,37 @@ class Menu extends Phaser.Scene {
       frameWidth: 130,
       frameHeight: 640,
     });
-    this.load.image('logo', 'https://labs.phaser.io/assets/sprites/phaser3-logo.png');
     this.load.image('true', '../assets/true.png');
     this.load.image('false', '../assets/false.png');
-    this.load.image('menuButton', '../assets/true.png'); // Placeholder menu button
+    this.load.image('menuButton', '../assets/true.png');
+    this.load.image('background', '../assets/techbg.png');
   }
 
   create() {
+
+    //bg
+    const bg = this.add.image(0, 0, 'background').setOrigin(0, 0);
+    bg.setDisplaySize(this.scale.width, this.scale.height);
+
+    const questionbg = this.add.rectangle(
+      this.scale.width / 2 - 50, // X position (centered horizontally)
+      this.scale.height / 2 + 30, // Y position (centered vertically)
+      1500, // Width
+      700, // Height
+      0xa4a4a4// Fill color (hexadecimal)
+    );
+    questionbg.setAlpha(.5);
+    
     this.currentQuestionIndex = 0;
     this.score = 0;
+    this.level = 0;
     // Create game objects
-    const logo = this.add.image(this.scale.width / 2, this.scale.height / 2 - 150, 'logo');
+
+    
     const trueButton = this.add.image(this.scale.width / 2 - 300, this.scale.height / 2 + 100, 'true').setInteractive();
     const falseButton = this.add.image(this.scale.width / 2 + 300, this.scale.height / 2 + 100, 'false').setInteractive();
 
-    this.scoreBoard = this.add.sprite(300,550, "scores");
+    this.scoreBoard = this.add.sprite(300, 500, "scores");
     
     this.anims.create({
       key: "xp_0",
@@ -81,9 +97,9 @@ class Menu extends Phaser.Scene {
     });
 
     // Display the first question
-    this.questionText = this.add.text(this.scale.width / 2, this.scale.height / 2, this.questions[this.currentQuestionIndex][0], {
+    this.questionText = this.add.text(this.scale.width / 2, this.scale.height / 2 - 50, this.questions[this.currentQuestionIndex][0], {
       fontSize: '50px',
-      color: '#ffffff',
+      color: '#000000',
       fontFamily: 'GameFont',
       letterSpacing: 50,
     }).setOrigin(0.5);
@@ -107,7 +123,6 @@ class Menu extends Phaser.Scene {
     // Add a "Main Menu" button
     const menuButton = this.add.image(100, 50, 'menuButton').setInteractive();
     menuButton.setScale(0.5); // Adjust button size
-    this.add.text(80, 40, 'Menu', { fontSize: '20px', color: '#ffffff' }).setOrigin(0.5);
 
     // Handle menu button click
     menuButton.on('pointerdown', () => {
@@ -147,15 +162,16 @@ class Menu extends Phaser.Scene {
       this.score++;
     }
 
-    // Move to the next question
     this.currentQuestionIndex++;
-
     if (this.currentQuestionIndex < this.questions.length) {
-      // Update the question text
       this.questionText.setText(this.questions[this.currentQuestionIndex][0]);
     } else {
-      // No more questions - display a completion message
-      this.questionText.setText('Quiz Complete!');
+      if (this.score == 5) {
+        this.questionText.setText('Quiz Complete / You leveled up!');
+        level++;
+      } else {
+        this.questionText.setText('Quiz Complete!');
+      }
     }
   }
 
@@ -187,48 +203,93 @@ class Menu extends Phaser.Scene {
         this.scoreBoard.play("xp_5", true);
         break
     }
-    // Add game logic that updates every frame
   }
 }
 
-// Main Menu Scene
+// // // // // // // // // // // //
+//
+// LEVELS SCENE
+//
+// // // // // // // // // // // //
+
+class Levels extends Phaser.Scene {
+  constructor() {
+    super('Levels');
+  }
+
+  preload() {
+    // Correct the image loading syntax
+    this.load.image('Menu_Panel', '../assets/menuPanel.png');
+  }
+
+  create() {
+    
+    // Display the main panel
+    const main_panel = this.add.image(this.scale.width / 2, this.scale.height / 2 + 50, 'Menu_Panel');
+
+    // Add a back button to return to the main menu
+    const backButton = this.add.text(this.scale.width / 2, this.scale.height / 2 + 150, 'Back to Main Menu', {
+      fontSize: '30px',
+      color: '#ffffff',
+      fontFamily: 'GameFont',
+    })
+      .setOrigin(0.5)
+      .setInteractive();
+
+    backButton.on('pointerdown', () => {
+      this.scene.start('MainMenu'); // Redirect back to the Main Menu
+    });
+  }
+}
+
+
+// // // // // // // // // // // //
+//
+// MAIN MENU SCENE
+//
+// // // // // // // // // // // //
+
 class MainMenu extends Phaser.Scene {
   constructor() {
     super('MainMenu');
   }
 
   preload() {
-    // Load any assets needed for the main menu
-    this.load.image('logo', 'https://labs.phaser.io/assets/sprites/phaser3-logo.png');
-    
+    this.load.image('Menu_Panel', '../assets/menuPanel.png');
+    this.load.image('levelsButton', '../assets/levels.png');
+    this.load.image('play', '../assets/play.png');
+    this.load.image('level1', '../assets/level1.png');
+    this.load.image('level2', '../assets/level2.png');
+    this.load.image('level3', '../assets/level3.png');
+    this.load.image('logo', '../assets/logo.png');
   }
 
   create() {
+    const logo = this.add.image(this.scale.width / 2, this.scale.height / 2 - 330, 'logo')
+    const main_panel = this.add.image(this.scale.width / 2, this.scale.height / 2 + 50, 'Menu_Panel');
+    const levels = this.add.image(this.scale.width / 2, this.scale.height / 2 + 150, 'levelsButton').setInteractive();
+    const play_button = this.add.image(this.scale.width / 2, this.scale.height / 2 + 10, 'play').setInteractive();
 
     this.add.text(this.scale.width / 2, this.scale.height / 2 - 100, 'Main Menu', {
-      fontSize: '40px',
-      color: '#ffffff',
+      fontSize: '70px',
+      color: '#00000',
       fontFamily: 'GameFont'
     }).setOrigin(0.5);
 
-    this.add.text(this.scale.width / 2, this.scale.height / 2 - 50, 'Levels', {
-      fontSize: '35px',
-      color: '#ffffff',
-      fontFamily: 'GameFont'
-    }).setOrigin(0.5);
+    levels.on('pointerdown', () => {
+      this.scene.stop('MainMenu');
+      this.scene.start('Levels'); // Redirect back to the Quiz Scene
+    });
 
-    const playButton = this.add.text(this.scale.width / 2, this.scale.height / 2, 'Start Quiz', {
-      fontSize: '30px',
-      color: '#00ff00',
-      fontFamily: 'GameFont'
-    }).setOrigin(0.5).setInteractive();
-
-    playButton.on('pointerdown', () => {
+    play_button.on('pointerdown', () => {
       this.scene.stop('MainMenu');
       this.scene.start('Game'); // Redirect back to the Quiz Scene
     });
   }
 }
+
+
+
 
 // Game configuration
 const config = {
@@ -243,13 +304,9 @@ const config = {
       debug: false
     }
   },
-  scene: [MainMenu, Menu] // Register both scenes
+  scene: [MainMenu, Menu, Levels] // Register both scenes
 };
 
 // Create a new Phaser Game instance
 const game = new Phaser.Game(config);
 
-// Handle window resizing
-window.addEventListener('resize', () => {
-  game.scale.resize(window.innerWidth, window.innerHeight);
-});
