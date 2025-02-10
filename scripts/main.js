@@ -37,23 +37,22 @@ class Menu extends Phaser.Scene {
     this.load.image('next', '../assets/next.png');
     this.load.image('retry', '../assets/retry.png');
     this.load.image('help', '../assets/help.png');
-    //this.load.image('background', '../assets/techbg.png');
+    this.load.image('background3', '../assets/bg2.png');
   }
 
   create() {
+    const bg = this.add.image(0, 0, 'background3').setOrigin(0, 0);
+    bg.setDisplaySize(this.scale.width, this.scale.height);
 
-    //bg
-    // const bg = this.add.image(0, 0, 'background').setOrigin(0, 0);
-    // bg.setDisplaySize(this.scale.width, this.scale.height);
 
     const questionbg = this.add.rectangle(
       this.scale.width / 2 - 50, // X position (centered horizontally)
       this.scale.height / 2 + 30, // Y position (centered vertically)
       1500, // Width
       700, // Height
-      0xa4a4a4// Fill color (hexadecimal)
+      0xffffff// Fill color (hexadecimal)
     );
-    questionbg.setAlpha(.5);
+    questionbg.setAlpha(.35);
     
     this.currentQuestionIndex = 0;
     this.score = 0;
@@ -270,9 +269,13 @@ class Levels extends Phaser.Scene {
     this.load.image('level3', '../assets/level3.png');
     this.load.image('back', '../assets/back.png');
     this.load.image('Level_Panel', '../assets/levelsPanel.png');
+    this.load.image('levels_background', '../assets/menuBg.png')
   }
 
   create() {
+    const bg = this.add.image(0, 0, 'levels_background').setOrigin(0, 0);
+    bg.setDisplaySize(this.scale.width, this.scale.height);
+
     const main_panel = this.add.image(this.scale.width / 2, this.scale.height / 2 + 50, 'Level_Panel');
     this.add.text(this.scale.width / 2, this.scale.height / 2 - 150, 'Levels', {
       fontSize: '70px',
@@ -319,12 +322,13 @@ class MainMenu extends Phaser.Scene {
     this.load.image('levelsButton', '../assets/levels.png');
     this.load.image('play', '../assets/play.png');
     this.load.image('logo', '../assets/logo.png');
-    //this.load.image('background', '../assets/menuBg.gif');
+    this.load.image('background2', '../assets/menuBg.png');
   }
 
   create() {
-    //const bg = this.add.image(0, 0, 'background').setOrigin(0, 0);
-    //bg.setDisplaySize(this.scale.width, this.scale.height);
+    const bg = this.add.image(0, 0, 'background2').setOrigin(0, 0);
+    bg.setDisplaySize(this.scale.width, this.scale.height);
+
     const logo = this.add.image(this.scale.width / 2, this.scale.height / 2 - 330, 'logo')
     const main_panel = this.add.image(this.scale.width / 2, this.scale.height / 2 + 50, 'Menu_Panel');
     const levels = this.add.image(this.scale.width / 2, this.scale.height / 2 + 150, 'levelsButton').setInteractive();
@@ -377,22 +381,23 @@ class Level2 extends Phaser.Scene {
     this.load.image('next', '../assets/next.png');
     this.load.image('retry', '../assets/retry.png');
     this.load.image('help', '../assets/help.png');
-    //this.load.image('background', '../assets/techbg.png');
+    this.load.image('background4', '../assets/bg1.png');
   }
 
   create() {
 
     //bg
-
+    const bg = this.add.image(0, 0, 'background4').setOrigin(0, 0);
+    bg.setDisplaySize(this.scale.width, this.scale.height);
 
     const questionbg = this.add.rectangle(
       this.scale.width / 2 - 50, // X position (centered horizontally)
       this.scale.height / 2 + 30, // Y position (centered vertically)
       1500, // Width
       700, // Height
-      0xa4a4a4// Fill color (hexadecimal)
+      0xffffff// Fill color (hexadecimal)
     );
-    questionbg.setAlpha(.5);
+    questionbg.setAlpha(.35);
     
     this.currentQuestionIndex = 0;
     this.score = 0;
